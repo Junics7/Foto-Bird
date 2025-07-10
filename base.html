@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Выставка птиц{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">Выставка птиц</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category_list' %}">Категории</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'results' %}">Результаты</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_bird' %}">Добавить птицу</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated and user.groups.all.0.name == 'Judges' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'judge_dashboard' %}">Панель судьи</a>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">Привет, {{ user.username }}!</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main class="container py-4">
+        {% if messages %}
+        <div class="row">
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-light py-4 mt-4">
+        <div class="container">
+            <p class="text-center mb-0">© 2023 Выставка птиц. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
