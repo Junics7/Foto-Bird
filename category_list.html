@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Категории - Выставка птиц{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Категории птиц</h1>
+        
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <p class="card-text">{{ category.description|truncatechars:150 }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{% url 'category_detail' category.id %}" class="btn btn-primary">Просмотреть птиц</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">Категории пока не добавлены.</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
