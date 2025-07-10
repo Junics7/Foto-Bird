@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}Панель судьи - Выставка птиц{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Панель судьи</h1>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">Птицы, ожидающие оценки</h2>
+            </div>
+            
+            <div class="card-body">
+                {% for category in categories %}
+                <h3 class="h5 mt-4 mb-3">{{ category.name }}</h3>
+                
+                {% with birds=unevaluated_birds|get_item:category %}
+                {% if birds %}
+                <div class="row">
+                    {% for bird in birds %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-warning">
+                            <img src="{{ bird.image.url }}" class="card-img-top" alt="{{ bird.name }}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ bird.name }}</h5>
+                                <p class="card-text">{{ bird.description|truncatechars:100 }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'bird_detail' bird.id %}" class="btn btn-primary w-100">Оценить</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="alert alert-success">В категории "{{ category.name }}" все птицы оценены!</p>
+                {% endif %}
+                {% endwith %}
+                
+                <hr class="my-4">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h2 class="h5 mb-0">Оцененные птицы</h2>
+            </div>
+            
+            <div class="card-body">
+                {% for category in categories %}
+                <h3 class="h5 mt-4 mb-3">{{ category.name }}</h3>
+                
+                {% with birds=evaluated_birds|get_item:category %}
+                {% if birds %}
+                <div class="row">
+                    {% for bird in birds %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-success">
+                            <img src="{{ bird.image.url }}" class="card-img-top" alt="{{ bird.name }}" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ bird.name }}</h5>
+                                <p class="card-text">
+                                    <strong>Ваша оценка:</strong> 
+                                    {{ bird.judge_evaluations.get.score }}/10
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{% url 'bird_detail' bird.id %}" class="btn btn-outline-primary w-100">Просмотреть/изменить</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="alert alert-warning">В категории "{{ category.name }}" нет оцененных птиц.</p>
+                {% endif %}
+                {% endwith %}
+                
+                <hr class="my-4">
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
