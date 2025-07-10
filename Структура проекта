@@ -1,0 +1,38 @@
+bird_exhibition/
+├── manage.py
+├── bird_exhibition/                 # Основной проект
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+├── core/                           # Приложение
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── migrations/
+│   │   └── __init__.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── templates/                      # Шаблоны
+│   ├── base.html
+│   ├── home.html
+│   ├── category_list.html
+│   ├── category_detail.html
+│   ├── bird_detail.html
+│   ├── upload_bird.html
+│   ├── judge_dashboard.html
+│   ├── results.html
+│   ├── login.html
+│   └── register.html
+├── static/                         # Статические файлы
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── main.js
+├── media/                          # Загруженные файлы
+│   └── birds/
+└── requirements.txt                # Зависимости
