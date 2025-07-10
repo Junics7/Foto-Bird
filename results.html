@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Результаты выставки - Выставка птиц{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Результаты выставки</h1>
+        
+        {% for category in categories %}
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5 mb-0">{{ category.name }}</h2>
+            </div>
+            <div class="card-body">
+                {% with birds=results_by_category|get_item:category %}
+                {% if birds %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Место</th>
+                                <th>Фото</th>
+                                <th>Название</th>
+                                <th>Владелец</th>
+                                <th>Оценка судей</th>
+                                <th>Голоса посетителей</th>
+                                <th>Общий балл</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for bird in birds %}
+                            <tr{% if forloop.counter == 1 %} class="table-warning"{% elif forloop.counter == 2 %} class="table-secondary"{% elif forloop.counter == 3 %} class="table-secondary"{% endif %}>
+                                <td>
+                                    {% if forloop.counter == 1 %}
+                                    <span class="badge bg-warning text-dark">1 место</span>
+                                    {% elif forloop.counter == 2 %}
+                                    <span class="badge bg-secondary">2 место</span>
+                                    {% elif forloop.counter == 3 %}
+                                    <span class="badge bg-secondary">3 место</span>
+                                    {% else %}
+                                    {{ forloop.counter }}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <img src="{{ bird.image.url }}" alt="{{ bird.name }}" class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                </td>
+                                <td>{{ bird.name }}</td>
+                                <td>{{ bird.owner.username }}</td>
+                                <td>{{ bird.judge_score|floatformat:1 }}/10</td>
+                                <td>{{ bird.visitor_votes }}</td>
+                                <td>{{ bird.total_score|floatformat:0 }}</td>
+                                <td>
+                                    <a href="{% url 'bird_detail' bird.id %}" class="btn btn-sm btn-primary">Подробнее</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">В категории "{{ category.name }}" нет птиц.</div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
